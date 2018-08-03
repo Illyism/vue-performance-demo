@@ -1,0 +1,19 @@
+{
+  "name": "example-tailwindcss",
+  "description": "Nuxt.js with Tailwind CSS",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "date-fns": "^1.29.0",
+    "nuxt": "latest",
+    "vue-material-design-icons": "^1.6.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.6",
+    "tailwindcss": "^0.6.4"
+  }
+}
