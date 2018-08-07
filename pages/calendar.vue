@@ -32,14 +32,15 @@ export default {
             newMinutes: null,
 
             currentMonth: 8,
-            personal_days_off: [
-                { dateStr: '2018-08-20', name: 'Sick day', start: 9, end: 17 },
-            ],
-            company_days_off: [
+            days_off: [
+                { dateStr: '2018-08-11', name: 'Sick day' },
                 { dateStr: '2018-08-15', name: 'Assumption of Mary' },
             ],
             schedule: {
-                '2018-08-01': 0, '2018-08-02': 480, '2018-08-03': 480, // ...
+                '2018-08-01': 480, '2018-08-02': 480, '2018-08-03': 480, '2018-08-04': 480,
+                '2018-08-05': 480, '2018-08-06': 0, '2018-08-07': 0,
+                '2018-08-08': 480, '2018-08-09': 480, '2018-08-10': 480, '2018-08-11': 480,
+                '2018-08-12': 480, '2018-08-13': 0, '2018-08-14': 0, // ...
             }
         }
     },
@@ -62,23 +63,14 @@ export default {
     },
     methods: {
         getReason (date) {
-            console.log('getReason', date)
-            // do we have a personal day off?
-            for (const day of this.personal_days_off) {
-                if (isSameDay(parse(day.dateStr), date)) {
-                    return day.name
-                }
-            }
-
-            // public holidays?
-            for (const day of this.company_days_off) {
+            // days off?
+            for (const day of this.days_off) {
                 if (isSameDay(parse(day.dateStr), date)) {
                     return day.name
                 }
             }
         },
         isWorkingOnDate (date) {
-            console.log('isWorkingOnDate', date)
             const dateStr = format(date, 'YYYY-MM-DD')
             
             // Are we working today according to our work schedule?
@@ -86,15 +78,8 @@ export default {
                 return false
             }
 
-            // do we have a personal day off?
-            for (const day of this.personal_days_off) {
-                if (isSameDay(parse(day.dateStr), date)) {
-                    return false
-                }
-            }
-
             // public holidays?
-            for (const day of this.company_days_off) {
+            for (const day of this.days_off) {
                 if (isSameDay(parse(day.dateStr), date)) {
                     return false
                 }
