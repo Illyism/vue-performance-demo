@@ -10,7 +10,10 @@
     </div>
     <div class="flex flex-wrap">
         <CalendarDay v-for="day in calendar" :key="day.i"
-            :day="day" />
+            :dateStr="day.dateStr"
+            :isWorking="day.isWorking"
+            :reason="day.reason"
+        />
     </div>
 </div>
 </template>
@@ -45,44 +48,45 @@ export default {
         }
     },
     computed: {
+        days_off_map () {
+            console.log('days_off_map computed')
+            return this.days_off.reduce((acc, cur) => {
+                acc[cur.dateStr] = cur
+                return acc
+            }, {})
+        },
         calendar () {
+            console.log('calendar computed')
             const calendar = []
             const daysInMonth = getDaysInMonth( setMonth(new Date(), this.currentMonth - 1) )
             for (let i = 1; i <= daysInMonth; i++) {
                 const date = setDate(setMonth(new Date(), this.currentMonth - 1), i)
+                const dateStr = format(date, 'YYYY-MM-DD')
                 calendar.push({
                     i: i,
                     date: date,
-                    dateStr: format(date, 'YYYY-MM-DD'),
-                    isWorking: this.isWorkingOnDate(date),
-                    reason: this.getReason(date),
+                    dateStr: dateStr,
+                    isWorking: this.isWorkingOnDate(dateStr),
+                    reason: this.getReason(dateStr),
                 })
             }
             return calendar
         },
     },
     methods: {
-        getReason (date) {
+        getReason (dateStr) {
             // days off?
-            for (const day of this.days_off) {
-                if (isSameDay(parse(day.dateStr), date)) {
-                    return day.name
-                }
-            }
+            const day = this.days_off_map[dateStr]
+            return day && day.name
         },
-        isWorkingOnDate (date) {
-            const dateStr = format(date, 'YYYY-MM-DD')
-            
+        isWorkingOnDate (dateStr) {
             // Are we working today according to our work schedule?
             if (this.schedule[dateStr] == 0) {
                 return false
             }
 
-            // public holidays?
-            for (const day of this.days_off) {
-                if (isSameDay(parse(day.dateStr), date)) {
-                    return false
-                }
+            if (this.days_off_map[dateStr]) {
+                return false
             }
 
             return true

@@ -1,9 +1,9 @@
 <template>
     <div 
         class="w-1/7 p-4 border border-white text-center group relative"
-        :class="{ 'bg-blue-lighter': day.isWorking, 'bg-red-light': !day.isWorking }">
-        <tooltip v-if="day.reason" class="hidden group-hover:block">{{ day.reason }}</tooltip>
-        <span>{{ day.dateStr }}</span>
+        :class="{ 'bg-blue-lighter': isWorking, 'bg-red-light': !isWorking }">
+        <tooltip v-if="reason" class="hidden group-hover:block">{{ reason }}</tooltip>
+        <span>{{ dateStr }}</span>
     </div>
 </template>
 
@@ -14,6 +14,9 @@ export default {
     components: {
         Tooltip,
     },
-    props: ['day']
+    props: ['dateStr', 'isWorking', 'reason'],
+    updated () {
+        console.log('CalendarDay updated')
+    }
 }
 </script>
